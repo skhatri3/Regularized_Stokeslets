@@ -5,13 +5,11 @@ function [f,ut,omega] = RegStokeslets2D_velocitytoforce_augmented(y,x,u,ep,mu)
 % points using the Method of Regularized Stokeslets 
 % Based on Cortez, SIAM J. Sci Comput. 2001
 
-
 %The matrix is augmented so that the sum of the forces is zero and the sum
 %of the torque is 0. 
 
-%Developed by Shilpa Khatri in collaboration with Ricardo Cortez and Daisuke Takagi 
-%For Microscale Ocean Biophysics 2024 
-%May 2024 
+% Developed by Shilpa Khatri and Ricardo Cortez 
+% July 2024 
 
 %y = (y1,y2) source points
 %f = (f1,f2) forces at those source points (not force density) 

@@ -5,10 +5,8 @@ function [u] = RegStokeslets2D_forcetovelocity(y,f,x,ep,mu)
 % Based on Cortez, SIAM J. Sci Comput. 2001
 % Constant flow is set to 0 here (Uo in Eqn 9)
 
-%Developed by Shilpa Khatri in collaboration with Ricardo Cortez and Daisuke Takagi 
-%For Microscale Ocean Biophysics 2024 
-%May 2024 
-
+% Developed by Shilpa Khatri and Ricardo Cortez 
+% July 2024 
 
 %y = (y1,y2) source points
 %f = (f1,f2) forces at those source points (not force density)
