@@ -25,9 +25,10 @@ sa = 4*pi*a*a;
 %cube in which the sphere is embedded and then mapping the points to the
 %surface of the sphere (see function sphere_surface)
 %number of points N for the N x N grid on each of the six sphere patches
-N = 24;
+N = 36;
 
-%velocity of translating sphere 
+%velocity of translating sphere - note exact solution below assumes
+%velocity of (0,0,uo3)
 uo1 = 0; 
 uo2 = 0; 
 uo3 = 1; 
@@ -45,10 +46,11 @@ Nx3 = 200;
 
 %% Setting forces and computing velocity 
 
-%sphere points on which forces are applied - discretization uses an 
+% sphere points on which forces are applied - discretization uses an 
 % N x N uniform grid on the face of a cube in which the unit sphere is embedded 
 % and then maps the points to the surface of the sphere 
 % darea - discretization (grid size) on sphere surface 
+% in this version darea is computed for each grid cell 
 [y1, y2, y3, darea] = six_patch_sphere_surface(N,a); 
 
 %regularization parameter
@@ -64,8 +66,7 @@ f2 = 3*mu*uo2*ones(Npts,1).*darea/2/a;
 f3 = 3*mu*uo3*ones(Npts,1).*darea/2/a; 
 
 %computing velocity on surface of sphere 
-%us = RegStokeslets3D_forcetovelocity([y1,y2,y3],[f1,f2,f3],[y1,y2,y3],ep,mu);
-us = RegStokeslets3D_velocitytoforce([y1,y2,y3],[y1,y2,y3],[f1,f2,f3],ep,mu);
+us = RegStokeslets3D_forcetovelocity([y1,y2,y3],[f1,f2,f3],[y1,y2,y3],ep,mu);
 us1 = us(:,1);
 us2 = us(:,2); 
 us3 = us(:,3); 
@@ -86,7 +87,7 @@ h3 = (x3max-x3min)/Nx3;
 %area of plane on which velocity will be computed 
 pa = (x3max-x3min)*(x1max-x1min);
 
-%computing velocity 
+%computing velocity on 2D surface
 u = RegStokeslets3D_forcetovelocity([y1,y2,y3],[f1,f2,f3],[x1,x2,x3],ep,mu);
 u1 = u(:,1);
 u2 = u(:,2); 
@@ -113,6 +114,7 @@ l2errors2 = sqrt(sum(errors2.^2.*darea)/sa);
 l2errors3 = sqrt(sum(errors3.^2.*darea)/sa); 
 
 fprintf('Error in velocity on surface of sphere \n')
+
 %prints the max error 
 fprintf('maximum error in us1: %d \n',max(errors1));
 fprintf('maximum error in us2: %d \n',max(errors2));
@@ -165,6 +167,7 @@ l2error2 = sqrt(sum(sum(error2.^2*h1*h3))/pa);
 l2error3 = sqrt(sum(sum(error3.^2*h1*h3))/pa); 
 
 fprintf('Error in velocity on 2D plane \n')
+
 %prints the max error 
 fprintf('maximum error in u1: %d \n',max(max(error1)));
 fprintf('maximum error in u2: %d \n',max(max(error2)));

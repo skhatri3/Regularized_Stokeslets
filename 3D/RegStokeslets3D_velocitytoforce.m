@@ -10,7 +10,7 @@ function [f] = RegStokeslets3D_velocitytoforce(y,x,u,ep,mu)
 %y = (y1,y2,y3) source points
 %f = (f1,f2,f3) forces at those source points (not force density)
 %x = (x1,x2,x3) target points 
-%u = (u1,u2,u3) velocity evaluated at those target points 
+%u = (u1,u2,u3) velocity at those target points 
 %mu is the viscosity 
 %ep is the width of the regularization 
 

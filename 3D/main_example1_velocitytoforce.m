@@ -1,8 +1,8 @@
 %main_example1_velocitytoforce
 
 % Example 1 Section 4 of Cortez, Fauci, Medovikov, Physics of Fluids 2005 
-% Setting forces on a sphere of radius a and computing the
-% velocity at given points 
+% Setting velocities on a sphere of radius a and computing the
+% forces at given points 
 % Velocity on sphere is set to (0,0,1) and the force is computed 
 
 % Developed by Shilpa Khatri and Ricardo Cortez
@@ -27,7 +27,8 @@ sa = 4*pi*a*a;
 %number of points N for the N x N grid on each of the six sphere patches
 N = 24;
 
-%velocity of translating sphere 
+%velocity of translating sphere - note exact solution below assumes
+%velocity of (0,0,uo3)
 uo1 = 0; 
 uo2 = 0; 
 uo3 = 1; 
@@ -45,10 +46,11 @@ Nx3 = 200;
 
 %% Setting forces and computing velocity 
 
-%sphere points on which forces are applied - discretization uses an 
+% sphere points on which forces are applied - discretization uses an 
 % N x N uniform grid on the face of a cube in which the unit sphere is embedded 
 % and then maps the points to the surface of the sphere 
 % darea - discretization (grid size) on sphere surface 
+% in this version darea is computed for each grid cell 
 [y1, y2, y3, darea] = six_patch_sphere_surface(N,a); 
 
 %regularization parameter
@@ -62,12 +64,8 @@ us1 = uo1*ones(Npts,1);
 us2 = uo2*ones(Npts,1); 
 us3 = uo3*ones(Npts,1); 
 
-%computing velocity on surface of sphere 
+%computing force on surface of sphere 
 fs = RegStokeslets3D_velocitytoforce([y1,y2,y3],[y1,y2,y3],[us1,us2,us3],ep,mu);
-%fs = M\[us1;us2;us3];
-%f1 = fs(1:Npts); 
-%f2 = fs(Npts+1:2*Npts);
-%f3 = fs(2*Npts+1:end); 
 f1 = fs(:,1);
 f2 = fs(:,2); 
 f3 = fs(:,3); 
@@ -88,7 +86,7 @@ h3 = (x3max-x3min)/Nx3;
 %area of plane on which velocity will be computed 
 pa = (x3max-x3min)*(x1max-x1min);
 
-%computing velocity 
+%computing velocity on 2D surface
 u = RegStokeslets3D_forcetovelocity([y1,y2,y3],[f1,f2,f3],[x1,x2,x3],ep,mu);
 u1 = u(:,1);
 u2 = u(:,2); 
@@ -117,6 +115,7 @@ l2errors2 = sqrt(sum(errors2.^2.*darea)/sa);
 l2errors3 = sqrt(sum(errors3.^2.*darea)/sa); 
 
 fprintf('Error in force on surface of sphere \n')
+
 %prints the max error 
 fprintf('maximum error in f1: %d \n',max(errors1));
 fprintf('maximum error in f2: %d \n',max(errors2));
@@ -169,6 +168,7 @@ l2error2 = sqrt(sum(sum(error2.^2*h1*h3))/pa);
 l2error3 = sqrt(sum(sum(error3.^2*h1*h3))/pa); 
 
 fprintf('Error in velocity on 2D plane \n')
+
 %prints the max error 
 fprintf('maximum error in u1: %d \n',max(max(error1)));
 fprintf('maximum error in u2: %d \n',max(max(error2)));
